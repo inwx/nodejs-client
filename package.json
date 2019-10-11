@@ -1,10 +1,29 @@
 {
   "name": "domrobot-client",
   "version": "3.0.0",
+  "description": "",
+  "author": "INWX",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inwx/nodejs-client.git"
+  },
+  "keywords": [
+    "INWX",
+    "API",
+    "INWX-API",
+    "Domrobot",
+    "Client",
+    "Domrobot-Client",
+    "Node",
+    "NodeJS"
+  ],
   "scripts": {
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build"
   },
   "dependencies": {
     "otplib": "^11.0.1",
