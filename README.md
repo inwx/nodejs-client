@@ -31,7 +31,7 @@ Example
 -------
 
 ```typescript
-import { ApiClient, Language } from '../domrobot';
+import { ApiClient, Language } from 'domrobot-client';
 
 const username = '';
 const password = '';
