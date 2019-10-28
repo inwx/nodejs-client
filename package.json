@@ -1,8 +1,8 @@
 {
   "name": "domrobot-client",
   "version": "3.0.0",
-  "description": "",
-  "author": "INWX",
+  "description": "INWX Domrobot Node.JS Client",
+  "author": "INWX Developer <developer@inwx.de> (https://inwx.com)",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
