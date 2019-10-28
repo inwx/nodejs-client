@@ -2,7 +2,7 @@ import * as otplib from 'otplib';
 import { CookieJar } from 'request';
 import * as request from 'request-promise-native';
 
-export class DomRobot {
+export class ApiClient {
     public static readonly CLIENT_VERSION = '3.0.0';
 
     public static readonly API_URL_LIVE = 'https://api.domrobot.com/jsonrpc/';
@@ -23,7 +23,7 @@ export class DomRobot {
      * @param language default language for future API requests.
      * @param debugMode whether requests and responses should be printed out.
      */
-    constructor(apiUrl: string = DomRobot.API_URL_OTE, language: string = Language.EN, debugMode: boolean = false) {
+    constructor(apiUrl: string = ApiClient.API_URL_OTE, language: string = Language.EN, debugMode: boolean = false) {
         this.apiUrl = apiUrl;
         this.language = language;
         this.debugMode = debugMode;
@@ -41,7 +41,7 @@ export class DomRobot {
     public async callApi(
         apiMethod: string,
         methodParams: any = {},
-        clientTransactionId: string = DomRobot.generateClientTransactionId(),
+        clientTransactionId: string = ApiClient.generateClientTransactionId(),
         language: string = this.language,
     ): Promise<any> {
         if ('clTRID'! in methodParams && clientTransactionId !== null) {
@@ -61,7 +61,7 @@ export class DomRobot {
                 body: requestBody,
                 headers: {
                     'Content-Type': 'application/json',
-                    'User-Agent': `DomRobot/${DomRobot.CLIENT_VERSION} (Node ${process.version})`,
+                    'User-Agent': `DomRobot/${ApiClient.CLIENT_VERSION} (Node ${process.version})`,
                 },
                 jar: this.cookieJar,
             })
