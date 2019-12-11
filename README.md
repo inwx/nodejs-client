@@ -22,7 +22,7 @@ Installation
 The recommended way is via npm:
 
 ```bash
-npm install --save inwx-domrobot
+npm install --save domrobot-client
 ```
 
 You can find more information about the package on [npmjs.org](https://www.npmjs.com/package/domrobot-client).
