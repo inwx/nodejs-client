@@ -3,7 +3,7 @@ import { CookieJar } from 'request';
 import * as request from 'request-promise-native';
 
 export class ApiClient {
-    public static readonly CLIENT_VERSION = '3.0.1';
+    public static readonly CLIENT_VERSION = '3.0.2';
 
     public static readonly API_URL_LIVE = 'https://api.domrobot.com/jsonrpc/';
     public static readonly API_URL_OTE = 'https://api.ote.domrobot.com/jsonrpc/';
