@@ -58,8 +58,10 @@ const asyncFunc = async () => {
 
     // get the first domain in the result array 'domain'
     const checkedDomain = domainCheckResponse.resData.domain[0];
-    if (checkedDomain.avail) {
+    if (checkedDomain.avail === 1) {
         console.log(`${domain} is still available!`);
+    } else if (checkedDomain.avail === -1) {
+        console.log(`Availability of ${domain} could not be checked.`);
     } else {
         console.log(`Unfortunately, ${domain} is already registered.`);
     }
