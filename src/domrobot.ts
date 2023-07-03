@@ -1,6 +1,4 @@
 import * as otplib from 'otplib';
-import { CookieJar } from 'request';
-import * as request from 'request-promise-native';
 
 export class ApiClient {
     public static readonly CLIENT_VERSION = '3.0.2';
@@ -12,11 +10,11 @@ export class ApiClient {
         return 'DomRobot-' + Math.round(Math.random() * 1000000000);
     }
 
-    private apiUrl: string;
+    private readonly apiUrl: string;
     private language: string;
     private debugMode: boolean;
 
-    private cookieJar: CookieJar;
+    private cookie: string;
 
     /**
      * @param apiUrl url of the API.
@@ -27,7 +25,7 @@ export class ApiClient {
         this.apiUrl = apiUrl;
         this.language = language;
         this.debugMode = debugMode;
-        this.cookieJar = request.jar();
+        this.cookie = null;
     }
 
     /**
@@ -56,23 +54,21 @@ export class ApiClient {
             params: methodParams,
         });
 
-        return request
-            .post(this.apiUrl, {
-                body: requestBody,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'User-Agent': `DomRobot/${ApiClient.CLIENT_VERSION} (Node ${process.version})`,
-                },
-                jar: this.cookieJar,
-            })
-            .then(response => {
-                if (this.debugMode) {
-                    console.log(`Request (${apiMethod}): ${requestBody}`);
-                    console.log(`Response (${apiMethod}): ${response}`);
-                }
-                return response;
-            })
-            .then(response => JSON.parse(response));
+        const response = await fetch(this.apiUrl, {
+            method: "POST",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'User-Agent': `DomRobot/${ApiClient.CLIENT_VERSION} (Node ${process.version})`,
+                Cookie: this.cookie
+            }),
+            body: requestBody,
+        })
+
+        if (apiMethod === 'account.login') {
+            this.cookie = response.headers.get('set-cookie');
+        }
+
+        return response.json()
     }
 
     /**
@@ -102,7 +98,7 @@ export class ApiClient {
      * Performs a logout at the API and destroys the current session.
      */
     public async logout(): Promise<any> {
-        return await this.callApi('account.logout').then(() => (this.cookieJar = request.jar()));
+        return await this.callApi('account.logout').then(() => (this.cookie = null));
     }
 
     public getApiUrl(): string {
