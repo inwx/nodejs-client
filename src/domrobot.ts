@@ -55,20 +55,26 @@ export class ApiClient {
         });
 
         const response = await fetch(this.apiUrl, {
-            method: "POST",
+            method: 'POST',
             headers: new Headers({
                 'Content-Type': 'application/json',
+                Cookie: this.cookie,
                 'User-Agent': `DomRobot/${ApiClient.CLIENT_VERSION} (Node ${process.version})`,
-                Cookie: this.cookie
             }),
             body: requestBody,
-        })
+        });
 
         if (apiMethod === 'account.login') {
             this.cookie = response.headers.get('set-cookie');
         }
 
-        return response.json()
+        const data = await response.json()
+        if (this.debugMode) {
+            console.info(`Request (${apiMethod}): ${requestBody}`);
+            console.info(`Response (${apiMethod}): ${data}`);
+        }
+
+        return data;
     }
 
     /**
