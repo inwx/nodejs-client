@@ -1,0 +1,22 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "script"
+  },
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "prettier"
+  ],
+  "rules": {
+    "no-console": 0,
+    "no-unused-vars": 0
+  }
+}
