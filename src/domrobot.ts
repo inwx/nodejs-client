@@ -35,12 +35,16 @@ export class ApiClient {
      * @param methodParams An object of parameters added to the request.
      * @param clientTransactionId Id sent with every request to distinguish your api requests in case you need support.
      * @param language Language for the API request. Default is value of field language.
+     * @param cacheOption HTTP cache options
+     * @param nextjsOptions Next.js options
      */
     public async callApi(
         apiMethod: string,
         methodParams: any = {},
         clientTransactionId: string = ApiClient.generateClientTransactionId(),
         language: string = this.language,
+        cacheOption?: "no-store" | "reload" | "no-cache" | "force-cache" | "only-if-cached" | "default",
+        nextjsOptions?: object
     ): Promise<any> {
         if ('clTRID'! in methodParams && clientTransactionId !== null) {
             methodParams.clTRID = clientTransactionId;
@@ -54,7 +58,7 @@ export class ApiClient {
             params: methodParams,
         });
 
-        const response = await fetch(this.apiUrl, {
+        let fetchOption = {
             method: 'POST',
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -62,7 +66,14 @@ export class ApiClient {
                 'User-Agent': `DomRobot/${ApiClient.CLIENT_VERSION} (Node ${process.version})`,
             }),
             body: requestBody,
-        });
+            cache: cacheOption ?? "default",
+        };
+
+        if (nextjsOptions !== undefined) {
+            fetchOption = {...fetchOption, ...nextjsOptions};
+        }
+
+        const response = await fetch(this.apiUrl, fetchOption);
 
         if (apiMethod === 'account.login') {
             this.cookie = response.headers.get('set-cookie');
@@ -125,6 +136,10 @@ export class ApiClient {
 
     public setDebugMode(value: boolean) {
         this.debugMode = value;
+    }
+
+    public getCookie(): string {
+        return this.cookie;
     }
 }
 
