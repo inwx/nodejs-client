@@ -20,12 +20,13 @@ export class ApiClient {
      * @param apiUrl url of the API.
      * @param language default language for future API requests.
      * @param debugMode whether requests and responses should be printed out.
+     * @param cookie Optional parameter to manually set the API cookie.
      */
-    constructor(apiUrl: string = ApiClient.API_URL_OTE, language: string = Language.EN, debugMode: boolean = false) {
+    constructor(apiUrl: string = ApiClient.API_URL_OTE, language: string = Language.EN, debugMode: boolean = false, cookie: string | null = null) {
         this.apiUrl = apiUrl;
         this.language = language;
         this.debugMode = debugMode;
-        this.cookie = null;
+        this.cookie = cookie !== undefined ? cookie : null;
     }
 
     /**
