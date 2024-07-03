@@ -141,6 +141,10 @@ export class ApiClient {
     public getCookie(): string {
         return this.cookie;
     }
+
+    public setCookie(cookie: string) {
+        this.cookie = cookie;
+    }
 }
 
 /**
