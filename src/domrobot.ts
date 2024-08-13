@@ -81,7 +81,7 @@ export class ApiClient {
 
         const data = await response.json();
         if (this.debugMode) {
-            console.info(`Request (${apiMethod}): ${requestBody}`)
+            console.info(`Request (${apiMethod}): ${requestBody}`);
             console.info(`Response (${apiMethod}): ${JSON.stringify(data)}`);
         }
 
