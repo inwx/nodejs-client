@@ -43,8 +43,8 @@ export class ApiClient {
         methodParams: any = {},
         clientTransactionId: string = ApiClient.generateClientTransactionId(),
         language: string = this.language,
-        cacheOption?: "no-store" | "reload" | "no-cache" | "force-cache" | "only-if-cached" | "default",
-        nextjsOptions?: object
+        cacheOption?: 'no-store' | 'reload' | 'no-cache' | 'force-cache' | 'only-if-cached' | 'default',
+        nextjsOptions?: object,
     ): Promise<any> {
         if ('clTRID'! in methodParams && clientTransactionId !== null) {
             methodParams.clTRID = clientTransactionId;
@@ -66,11 +66,11 @@ export class ApiClient {
                 'User-Agent': `DomRobot/${ApiClient.CLIENT_VERSION} (Node ${process.version})`,
             }),
             body: requestBody,
-            cache: cacheOption ?? "default",
+            cache: cacheOption ?? 'default',
         };
 
         if (nextjsOptions !== undefined) {
-            fetchOption = {...fetchOption, ...nextjsOptions};
+            fetchOption = { ...fetchOption, ...nextjsOptions };
         }
 
         const response = await fetch(this.apiUrl, fetchOption);
@@ -79,7 +79,7 @@ export class ApiClient {
             this.cookie = response.headers.get('set-cookie');
         }
 
-        const data = await response.json()
+        const data = await response.json();
         if (this.debugMode) {
             console.info(`Request (${apiMethod}): ${requestBody}`);
             console.info(`Response (${apiMethod}): ${JSON.stringify(data)}`);
