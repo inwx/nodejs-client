@@ -1,8 +1,8 @@
 name: format-lint.yaml
 
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - master
 
 jobs:
