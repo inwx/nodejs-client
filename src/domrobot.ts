@@ -23,7 +23,12 @@ export class ApiClient {
      * @param debugMode whether requests and responses should be printed out.
      * @param headers Optional HTTP headers to be included in all API requests.
      */
-    constructor(apiUrl: string = ApiClient.API_URL_OTE, language: string = Language.EN, debugMode: boolean = false, headers: Record<string, any> = {}) {
+    constructor(
+        apiUrl: string = ApiClient.API_URL_OTE,
+        language: string = Language.EN,
+        debugMode: boolean = false,
+        headers: Record<string, any> = {},
+    ) {
         this.apiUrl = apiUrl;
         this.language = language;
         this.debugMode = debugMode;

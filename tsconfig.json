@@ -1,16 +1,13 @@
 {
-  "compilerOptions": {
-    "module": "none",
-    "target": "es6",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "outDir": "./lib"
-  },
-  "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "examples"
-  ]
+    "compilerOptions": {
+        "module": "none",
+        "target": "es6",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "outDir": "./lib"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "examples"]
 }
