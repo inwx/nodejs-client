@@ -15,17 +15,20 @@ export class ApiClient {
     private debugMode: boolean;
 
     private cookie: string;
+    private headers: Record<string, any>;
 
     /**
      * @param apiUrl url of the API.
      * @param language default language for future API requests.
      * @param debugMode whether requests and responses should be printed out.
+     * @param headers Optional HTTP headers to be included in all API requests.
      */
-    constructor(apiUrl: string = ApiClient.API_URL_OTE, language: string = Language.EN, debugMode: boolean = false) {
+    constructor(apiUrl: string = ApiClient.API_URL_OTE, language: string = Language.EN, debugMode: boolean = false, headers: Record<string, any> = {}) {
         this.apiUrl = apiUrl;
         this.language = language;
         this.debugMode = debugMode;
         this.cookie = null;
+        this.headers = headers;
     }
 
     /**
@@ -64,6 +67,7 @@ export class ApiClient {
                 'Content-Type': 'application/json',
                 Cookie: this.cookie,
                 'User-Agent': `DomRobot/${ApiClient.CLIENT_VERSION} (Node ${process.version})`,
+                ...(this.headers ?? {}),
             }),
             body: requestBody,
             cache: cacheOption ?? 'default',
@@ -144,6 +148,14 @@ export class ApiClient {
 
     public setCookie(cookie: string) {
         this.cookie = cookie;
+    }
+
+    public setHeaders(headers: Record<string, any>) {
+        this.headers = headers;
+    }
+
+    public getHeaders(): Record<string, any> {
+        return this.headers;
     }
 }
 
