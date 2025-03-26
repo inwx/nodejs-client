@@ -1,20 +1,20 @@
 name: format-lint.yaml
 
 on:
-  pull_request:
-    branches:
-      - master
+    pull_request:
+        branches:
+            - master
 
 jobs:
-  format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - run: npm ci
-      - name: Prettier check
-        run: npm run format:check
-      - name: Lint the code
-        run: npm run lint
+    format:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+            - run: npm ci
+            - name: Prettier check
+              run: npm run format:check
+            - name: Lint the code
+              run: npm run lint
