@@ -1,0 +1,28 @@
+version: 2
+updates:
+    - package-ecosystem: npm
+      directory: '/'
+      schedule:
+          interval: weekly
+      cooldown:
+          default-days: 7
+      groups:
+          dev-dependencies:
+              dependency-type: development
+              update-types: [minor, patch]
+          dev-security-updates:
+              applies-to: security-updates
+              dependency-type: development
+      ignore:
+          # typescript-eslint supports TypeScript below 6.1 only; a major upgrade is a manual migration.
+          - dependency-name: typescript
+            update-types: ['version-update:semver-major']
+          # Newer Node.js types permit APIs that the supported Node.js versions do not have.
+          - dependency-name: '@types/node'
+            update-types: ['version-update:semver-major']
+    - package-ecosystem: github-actions
+      directory: '/'
+      schedule:
+          interval: weekly
+      cooldown:
+          default-days: 7

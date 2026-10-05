@@ -1,7 +1,7 @@
 import * as otplib from 'otplib';
 
 export class ApiClient {
-    public static readonly CLIENT_VERSION = '3.0.2';
+    public static readonly CLIENT_VERSION = '3.3.1';
 
     public static readonly API_URL_LIVE = 'https://api.domrobot.com/jsonrpc/';
     public static readonly API_URL_OTE = 'https://api.ote.domrobot.com/jsonrpc/';
@@ -41,10 +41,13 @@ export class ApiClient {
      *
      * @param apiMethod The name of the method called in the API.
      * @param methodParams An object of parameters added to the request.
-     * @param clientTransactionId Id sent with every request to distinguish your api requests in case you need support.
-     * @param language Language for the API request. Default is value of field language.
-     * @param cacheOption HTTP cache options
-     * @param nextjsOptions Next.js options
+     * @param clientTransactionId Id to distinguish your api requests in case you need support. It is sent only if
+     *     methodParams already has the key `clTRID`, and it then replaces that value.
+     * @param language Language for the API request. Default is value of field language. It is sent only if
+     *     methodParams already has the key `lang`, and it then replaces that value.
+     * @param cacheOption HTTP cache option of fetch. `only-if-cached` needs `mode: 'same-origin'`.
+     * @param nextjsOptions Next.js options, spread over the fetch options. Each key replaces the value of the client.
+     *     A `headers` key replaces all default headers.
      */
     public async callApi(
         apiMethod: string,
@@ -70,7 +73,7 @@ export class ApiClient {
             method: 'POST',
             headers: new Headers({
                 'Content-Type': 'application/json',
-                Cookie: this.cookie,
+                ...(this.cookie != null ? { Cookie: this.cookie } : {}),
                 'User-Agent': `DomRobot/${ApiClient.CLIENT_VERSION} (Node ${process.version})`,
                 ...(this.headers ?? {}),
             }),
@@ -88,9 +91,23 @@ export class ApiClient {
             this.cookie = response.headers.get('set-cookie');
         }
 
-        const data = await response.json();
+        const data = await response.json().catch((error) => {
+            if (error instanceof SyntaxError) {
+                // The ES6 lib of the compiler has no constructor with options.
+                throw Object.assign(
+                    new SyntaxError(
+                        `Response of ${apiMethod} is not JSON (HTTP ${response.status} ${response.statusText})`,
+                    ),
+                    { cause: error },
+                );
+            }
+            throw error;
+        });
         if (this.debugMode) {
-            console.info(`Request (${apiMethod}): ${requestBody}`);
+            const printedRequest = JSON.stringify({ method: apiMethod, params: methodParams }, (key, value) =>
+                key === 'pass' || key === 'tan' ? '***' : value,
+            );
+            console.info(`Request (${apiMethod}): ${printedRequest}`);
             console.info(`Response (${apiMethod}): ${JSON.stringify(data)}`);
         }
 
