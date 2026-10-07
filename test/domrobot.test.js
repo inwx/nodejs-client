@@ -7,7 +7,7 @@ const { version } = require('../package.json');
 
 const originalFetch = globalThis.fetch;
 const TFA_ERROR = 'API requests two factor challenge but no shared secret is given. Aborting.';
-const SHARED_SECRET = 'JBSWY3DPEHPK3PXP';
+const SHARED_SECRET = 'KVKFKRCPNZQUYMLXOVYDSQKJKZDTSRLD'; // 32 base32 characters, 20 bytes
 const SET_COOKIE = 'domrobot=abc; Path=/; HttpOnly';
 
 let calls = [];
@@ -260,13 +260,15 @@ describe('login()', () => {
         });
     }
 
-    // The behaviour of 3.3.0 and earlier: only null is a missing secret.
-    test('makes the unlock call for an empty secret and returns its response', async () => {
-        const unlockData = { code: 2200, msg: 'Authentication error' };
-        stubFetch(loginResponse({ code: 1000, resData: { tfa: 'GOOGLE-AUTH' } }), jsonResponse(unlockData));
+    // Since 4.0.0: otplib rejects an empty secret, and login() rejects with that error.
+    test('rejects with an Error and makes no unlock call for an empty secret', async () => {
+        stubFetch(loginResponse({ code: 1000, resData: { tfa: 'GOOGLE-AUTH' } }));
 
-        assert.deepEqual(await new ApiClient().login('user', 'secret', ''), unlockData);
-        assert.equal(calls[1].body.method, 'account.unlock');
+        await assert.rejects(new ApiClient().login('user', 'secret', ''), (reason) => {
+            assert.ok(reason instanceof Error);
+            return true;
+        });
+        assert.equal(calls.length, 1);
     });
 });
 
