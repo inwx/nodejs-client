@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "none",
+        "module": "commonjs",
         "target": "es6",
         "moduleResolution": "node",
         "sourceMap": true,
@@ -9,5 +9,5 @@
         "outDir": "./lib"
     },
     "include": ["src"],
-    "exclude": ["node_modules", "examples"]
+    "exclude": ["node_modules"]
 }

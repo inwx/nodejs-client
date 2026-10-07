@@ -11,12 +11,23 @@ jobs:
             contents: read
             id-token: write
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@v7
+            - uses: actions/setup-node@v7
               with:
-                  node-version: '20.x'
+                  node-version: '24.x'
                   registry-url: 'https://registry.npmjs.org'
             - run: npm ci
+            - name: Check the release tag
+              env:
+                  RELEASE_TAG: ${{ github.event.release.tag_name }}
+              run: |
+                  expected="v$(node -p "require('./package.json').version")"
+                  if [ "$RELEASE_TAG" != "$expected" ]; then
+                      echo "::error::Release tag $RELEASE_TAG is not $expected (version in package.json)."
+                      exit 1
+                  fi
+            - name: Test
+              run: npm test
             - run: npm publish --provenance --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
