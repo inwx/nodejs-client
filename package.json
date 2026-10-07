@@ -33,7 +33,7 @@
         "test": "node --test"
     },
     "dependencies": {
-        "otplib": "^12.0.1"
+        "otplib": "^13.5.0"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
