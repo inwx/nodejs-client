@@ -1,7 +1,7 @@
 import * as otplib from 'otplib';
 
 export class ApiClient {
-    public static readonly CLIENT_VERSION = '3.3.1';
+    public static readonly CLIENT_VERSION = '4.0.0';
 
     public static readonly API_URL_LIVE = 'https://api.domrobot.com/jsonrpc/';
     public static readonly API_URL_OTE = 'https://api.ote.domrobot.com/jsonrpc/';
@@ -127,7 +127,7 @@ export class ApiClient {
             if (sharedSecret === null) {
                 return Promise.reject('API requests two factor challenge but no shared secret is given. Aborting.');
             }
-            const secretCode = otplib.authenticator.generate(sharedSecret);
+            const secretCode = otplib.generateSync({ secret: sharedSecret });
             const unlockResult = await this.callApi('account.unlock', { tan: secretCode });
             if (unlockResult.code !== 1000) {
                 return unlockResult;
